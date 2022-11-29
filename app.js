@@ -1,7 +1,12 @@
 let prevValue;
 let displayValue;
 let result = 0;
+let operation;
 const display = document.querySelector("#display");
+
+const changeLength = function() {
+    display.textContent = display.textContent.slice(0, 14);
+}
 
 const updateDisplay = function() {
     if(display.textContent === "0" && displayValue !== "."){
@@ -9,7 +14,52 @@ const updateDisplay = function() {
     } else {
         display.textContent += displayValue;
     }
+    changeLength();
 };
+
+const saveValue = function() {
+    prevValue = display.textContent;
+    display.textContent = "0";
+}
+
+const btnClear = document.querySelector("#btn-clear");
+btnClear.addEventListener("click", function(){
+    prevValue = null;
+    displayValue = null;
+    display.textContent = "0";
+});
+
+const btnSign = document.querySelector("#btn-sign");
+btnSign.addEventListener("click", function(){
+    display.textContent *= -1;
+    changeLength();
+});
+
+const btnPercent = document.querySelector("#btn-percent");
+btnPercent.addEventListener("click", function(){
+    display.textContent /= 100;
+    changeLength();
+});
+
+const btnDivide = document.querySelector("#btn-divide");
+btnDivide.addEventListener("click", function(){
+    saveValue(); operation = "/";
+});
+
+const btnMultiply = document.querySelector("#btn-multiply");
+btnMultiply.addEventListener("click", function(){
+    saveValue(); operation = "*";
+});
+
+const btnMinus = document.querySelector("#btn-minus");
+btnMinus.addEventListener("click", function(){
+    saveValue(); operation = "-";
+});
+
+const btnPlus = document.querySelector("#btn-plus");
+btnPlus.addEventListener("click", function(){
+    saveValue(); operation = "+";
+});
 
 const btn0 = document.querySelector("#btn-0");
 btn0.addEventListener("click", function(){
@@ -75,4 +125,20 @@ const btnDot = document.querySelector("#btn-dot");
 btnDot.addEventListener("click", function(){
     displayValue = ".";
     updateDisplay();
+});
+
+const btnEqual = document.querySelector("#btn-equal");
+btnEqual.addEventListener("click", function(){
+    if(prevValue){
+        if(operation === "+")
+            result = prevValue + display.textContent;
+        else if(operation === "-")
+            result = prevValue - display.textContent;
+        else if(operation === "/")
+            result = prevValue / display.textContent;
+        else if(operation === "*")
+            result = prevValue * display.textContent;
+    }
+    display.textContent = result;
+    changeLength();
 });
